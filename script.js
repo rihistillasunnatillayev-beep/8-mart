@@ -89,21 +89,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Load greetings from localStorage
-function loadGreetings() {
+// Load greetings from server
+async function loadGreetings() {
     try {
-        const greetings = JSON.parse(localStorage.getItem('8mart_greetings') || '[]');
+        const response = await fetch('/api/greetings');
+        if (!response.ok) {
+            throw new Error('Server response not ok');
+        }
+        const greetings = await response.json();
+        console.log('Loaded greetings from server:', greetings);
         displayGreetings(greetings);
     } catch (error) {
         console.error('Error loading greetings:', error);
-        showNotification('Tabriklarni yuklashda xatolik yuz berdi', 'error');
+        showNotification('Server ishlamayapti, lokal ma\'lumotlar yuklanmoqda...', 'info');
+        // Fallback to localStorage if server fails
+        const localGreetings = JSON.parse(localStorage.getItem('8mart_greetings') || '[]');
+        displayGreetings(localGreetings);
     }
 }
 
-// Save greetings to localStorage
-function saveGreetings(greetings) {
+// Save greetings to server
+async function saveGreetings(greetings) {
     try {
-        localStorage.setItem('8mart_greetings', JSON.stringify(greetings));
+        // This function is not used anymore since we save directly to server
+        console.log('Saving to server:', greetings);
     } catch (error) {
         console.error('Error saving greetings:', error);
     }
@@ -144,12 +153,14 @@ function displayGreetings(greetings) {
 }
 
 // Wish Form Submission
-function submitWish() {
+async function submitWish() {
     const nameInput = document.getElementById('wish-name');
     const messageInput = document.getElementById('wish-message');
 
     const name = nameInput.value.trim();
     const message = messageInput.value.trim();
+
+    console.log('Submitting wish:', { name, message });
 
     if (!name || !message) {
         showNotification('Iltimos, barcha maydonlarni to\'ldiring!', 'error');
@@ -157,43 +168,60 @@ function submitWish() {
     }
 
     try {
-        // Get existing greetings
-        const greetings = JSON.parse(localStorage.getItem('8mart_greetings') || '[]');
-        
-        // Create new greeting
-        const newGreeting = {
-            id: Date.now(),
-            name: name,
-            message: message,
-            timestamp: new Date().toISOString()
-        };
+        // Send to server
+        const response = await fetch('/api/greetings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, message })
+        });
 
-        // Add to beginning
-        greetings.unshift(newGreeting);
-        
-        // Keep only last 50 greetings
-        if (greetings.length > 50) {
-            greetings.splice(50);
+        const result = await response.json();
+        console.log('Server response:', result);
+
+        if (response.ok) {
+            // Clear form
+            nameInput.value = '';
+            messageInput.value = '';
+
+            // Show success notification
+            showNotification('Tabrikingiz muvaffaqiyatli yuborildi!', 'success');
+
+            // Add confetti effect
+            createConfetti();
+
+            // Reload greetings from server
+            await loadGreetings();
+        } else {
+            showNotification(result.error || 'Xatolik yuz berdi', 'error');
         }
-
-        // Save to localStorage
-        saveGreetings(greetings);
-
-        // Clear form
-        nameInput.value = '';
-        messageInput.value = '';
-
-        // Show success notification
-        showNotification('Tabrikingiz muvaffaqiyatli yuborildi!', 'success');
-
-        // Add confetti effect
-        createConfetti();
-
-        // Reload greetings
-        loadGreetings();
     } catch (error) {
         console.error('Error submitting wish:', error);
-        showNotification('Tabrikni saqlashda xatolik yuz berdi', 'error');
+        showNotification('Serverga ulanishda xatolik yuz berdi', 'error');
+        
+        // Fallback to localStorage if server fails
+        try {
+            const greetings = JSON.parse(localStorage.getItem('8mart_greetings') || '[]');
+            const newGreeting = {
+                id: Date.now(),
+                name: name,
+                message: message,
+                timestamp: new Date().toISOString()
+            };
+            greetings.unshift(newGreeting);
+            if (greetings.length > 50) greetings.splice(50);
+            localStorage.setItem('8mart_greetings', JSON.stringify(greetings));
+            
+            nameInput.value = '';
+            messageInput.value = '';
+            showNotification('Tabrik lokal saqlandi!', 'success');
+            createConfetti();
+            displayGreetings(greetings);
+        } catch (localError) {
+            console.error('Local fallback failed:', localError);
+            showNotification('Tabrikni saqlab bo\'lmadi', 'error');
+        }
     }
 }
 
