@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 Mart - Xalqaro Xotin-qizlar kuni</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">8 Mart</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Bosh sahifa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">Haqida</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#gallery" class="nav-link">Galereya</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#wishes" class="nav-link">Tabrik</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Xalqaro Xotin-qizlar kuni</h1>
+                <p class="hero-subtitle">8 Mart</p>
+                <p class="hero-description">Hurmat, mehr va ehtirom bilan barcha ayollarga</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('wishes')">Tabrik yuborish</button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('about')">Ko'proq bilish</button>
+                </div>
+            </div>
+            <div class="hero-animation">
+                <div class="floating-hearts">
+                    <div class="heart">❤️</div>
+                    <div class="heart">💐</div>
+                    <div class="heart">🌸</div>
+                    <div class="heart">💖</div>
+                    <div class="heart">🌺</div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">8 Mart haqida</h2>
+            <div class="about-content">
+                <div class="about-text-full">
+                    <p class="about-description">
+                        Xalqaro xotin-qizlar kuni - bu har yili 8 martda nishonlanadigan 
+                        global bayram bo'lib, ayollarning siyosiy, iqtisodiy, madaniy va 
+                        ijtimoiy yutuqlarini sharaflaydi.
+                    </p>
+                    <div class="about-features">
+                        <div class="feature">
+                            <div class="feature-icon">🌍</div>
+                            <h3>Global bayram</h3>
+                            <p>Dunyoning 100 dan ortiq mamlakatlarida nishonlanadi</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">💪</div>
+                            <h3>Ayollar kuchi</h3>
+                            <p>Jamiyatdagi ayollarning muhim rolini ta'kidlaydi</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🌸</div>
+                            <h3>Bahor ramzi</h3>
+                            <p>Yangi hayot, umid va go'zallik timsoli</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <h2 class="section-title">Galereya</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-content">
+                        <div class="gallery-icon">🌹</div>
+                        <h3>Gullar</h3>
+                        <p>Bahorning birinchi xabarchilari</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">
+                        <div class="gallery-icon">💐</div>
+                        <h3>Sovg'alar</h3>
+                        <p>Ehtirom va mehr timsoli</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">
+                        <div class="gallery-icon">🌺</div>
+                        <h3>Go'zallik</h3>
+                        <p>Tabiatning ajoyib yaratilishi</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">
+                        <div class="gallery-icon">💖</div>
+                        <h3>Mehr</h3>
+                        <p>Eng qimmatbaho his-tuyg'ular</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">
+                        <div class="gallery-icon">🌸</div>
+                        <h3>Bahor</h3>
+                        <p>Yangi boshlanishlar vaqt</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">
+                        <div class="gallery-icon">✨</div>
+                        <h3>Quvonch</h3>
+                        <p>Kundalik shodliklar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="wishes" class="wishes">
+        <div class="container">
+            <h2 class="section-title">Tabriknomalar</h2>
+            <div class="wish-form">
+                <div class="form-group">
+                    <input type="text" id="wish-name" placeholder="Ismingiz" class="form-input">
+                </div>
+                <div class="form-group">
+                    <textarea id="wish-message" placeholder="Tabrik matni..." class="form-textarea"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="submitWish()">Tabrik yuborish</button>
+            </div>
+            <div class="wishes-list" id="wishes-list">
+                <!-- Wishes will be loaded here from server -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>8 Mart</h3>
+                    <p>Xalqaro Xotin-qizlar kuni bilan bog'liq barcha ma'lumotlar</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tezkor havolalar</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Bosh sahifa</a></li>
+                        <li><a href="#about">Haqida</a></li>
+                        <li><a href="#gallery">Galereya</a></li>
+                        <li><a href="#wishes">Tabrik</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Ijtimoiy tarmoqlar</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📱</a>
+                        <a href="#" class="social-link">💬</a>
+                        <a href="#" class="social-link">📧</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 8 Mart. Xalqaro Xotin-qizlar kuni tabriklimiz.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
