@@ -101,10 +101,9 @@ async function loadGreetings() {
         displayGreetings(greetings);
     } catch (error) {
         console.error('Error loading greetings:', error);
-        showNotification('Serverga ulanishda xatolik, lokal ma\'lumotlar yuklanmoqda...', 'info');
-        // Fallback to localStorage if server fails
-        const localGreetings = JSON.parse(localStorage.getItem('8mart_greetings') || '[]');
-        displayGreetings(localGreetings);
+        showNotification('Serverga ulanishda xatolik. Iltimos, serverni tekshiring.', 'error');
+        // Show empty state
+        displayGreetings([]);
     }
 }
 
@@ -186,7 +185,7 @@ async function submitWish() {
             messageInput.value = '';
 
             // Show success notification
-            showNotification('Tabrikingiz muvaffaqiyatli yuborildi!', 'success');
+            showNotification('Tabrikingiz muvaffaqiyatli saqlandi!', 'success');
 
             // Add confetti effect
             createConfetti();
@@ -195,34 +194,11 @@ async function submitWish() {
             await loadGreetings();
         } else {
             console.error('Server error:', result);
-            throw new Error(result.error || 'Server xatolik');
+            showNotification(result.error || 'Server xatolik. Iltimos, qayta urining.', 'error');
         }
     } catch (error) {
         console.error('Error submitting wish:', error);
-        showNotification('Serverga ulanib bo\'lmadi, lokal saqlanmoqda...', 'warning');
-        
-        // Fallback to localStorage if server fails
-        try {
-            const greetings = JSON.parse(localStorage.getItem('8mart_greetings') || '[]');
-            const newGreeting = {
-                id: Date.now(),
-                name: name,
-                message: message,
-                timestamp: new Date().toISOString()
-            };
-            greetings.unshift(newGreeting);
-            if (greetings.length > 50) greetings.splice(50);
-            localStorage.setItem('8mart_greetings', JSON.stringify(greetings));
-            
-            nameInput.value = '';
-            messageInput.value = '';
-            showNotification('Tabrik lokal saqlandi! (Serverga ulanib bo\'lmadi)', 'success');
-            createConfetti();
-            displayGreetings(greetings);
-        } catch (localError) {
-            console.error('Local fallback failed:', localError);
-            showNotification('Tabrikni saqlab bo\'lmadi. Iltimos, qayta urining.', 'error');
-        }
+        showNotification('Serverga ulanib bo\'lmadi. Iltimos, internet aloqasini tekshiring.', 'error');
     }
 }
 
