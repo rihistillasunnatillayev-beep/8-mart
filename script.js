@@ -94,14 +94,14 @@ async function loadGreetings() {
     try {
         const response = await fetch('/api/greetings');
         if (!response.ok) {
-            throw new Error('Server response not ok');
+            throw new Error(`Server responded with ${response.status}`);
         }
         const greetings = await response.json();
         console.log('Loaded greetings from server:', greetings);
         displayGreetings(greetings);
     } catch (error) {
         console.error('Error loading greetings:', error);
-        showNotification('Server ishlamayapti, lokal ma\'lumotlar yuklanmoqda...', 'info');
+        showNotification('Serverga ulanishda xatolik, lokal ma\'lumotlar yuklanmoqda...', 'info');
         // Fallback to localStorage if server fails
         const localGreetings = JSON.parse(localStorage.getItem('8mart_greetings') || '[]');
         displayGreetings(localGreetings);
@@ -194,11 +194,12 @@ async function submitWish() {
             // Reload greetings from server
             await loadGreetings();
         } else {
-            showNotification(result.error || 'Xatolik yuz berdi', 'error');
+            console.error('Server error:', result);
+            throw new Error(result.error || 'Server xatolik');
         }
     } catch (error) {
         console.error('Error submitting wish:', error);
-        showNotification('Serverga ulanishda xatolik yuz berdi', 'error');
+        showNotification('Serverga ulanib bo\'lmadi, lokal saqlanmoqda...', 'warning');
         
         // Fallback to localStorage if server fails
         try {
@@ -215,12 +216,12 @@ async function submitWish() {
             
             nameInput.value = '';
             messageInput.value = '';
-            showNotification('Tabrik lokal saqlandi!', 'success');
+            showNotification('Tabrik lokal saqlandi! (Serverga ulanib bo\'lmadi)', 'success');
             createConfetti();
             displayGreetings(greetings);
         } catch (localError) {
             console.error('Local fallback failed:', localError);
-            showNotification('Tabrikni saqlab bo\'lmadi', 'error');
+            showNotification('Tabrikni saqlab bo\'lmadi. Iltimos, qayta urining.', 'error');
         }
     }
 }
@@ -247,7 +248,7 @@ function showNotification(message, type = 'info') {
         top: 100px;
         right: 20px;
         padding: 15px 25px;
-        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#2196f3'};
         color: white;
         border-radius: 10px;
         box-shadow: 0 5px 20px rgba(0,0,0,0.2);
